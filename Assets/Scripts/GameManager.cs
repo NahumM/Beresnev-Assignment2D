@@ -1,20 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+    [Header("Components")]
     [SerializeField] UIManager _uIManager;
     [SerializeField] DataController _dataController;
     [SerializeField] Ball _ball;
     [SerializeField] GlobalBallChanger _globalBallChanger;
-
+    [SerializeField] List <PlayerPlatform> _players = new List<PlayerPlatform>();
 
     int _scoreRecord;
     int _score;
-
     BallStats _currentBall;
-
 
     enum GameState
     {
@@ -43,6 +42,8 @@ public class GameManager : MonoBehaviour
                     _uIManager.MenuPanelTurn(false);
                     _ball?.ChangeBall(_currentBall);
                     _ball?.StartBallBehaviour();
+                    foreach (PlayerPlatform player in _players) player.EnableController();
+                    _uIManager?.ScoreUITurn(true);
                     break;
                 case GameState.Pause:
                     Time.timeScale = 0f;
@@ -51,9 +52,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-
-
 
     private void Start()
     {
@@ -67,6 +65,7 @@ public class GameManager : MonoBehaviour
         _dataController?.Init();
         _uIManager?.Init();
         _ball?.Init();
+        foreach (PlayerPlatform player in _players) player.Init();
 
     }
     private void LoadData()
@@ -95,8 +94,6 @@ public class GameManager : MonoBehaviour
         _currentBall = stats;
         LoadData();
     }
-
-
 
     private void ScoreAdd()
     {

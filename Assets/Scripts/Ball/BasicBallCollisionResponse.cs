@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 
 [RequireComponent(typeof(IBallMover))]
@@ -12,10 +11,13 @@ public class BasicBallCollisionResponse : MonoBehaviour, IBallCollisionResponse
 
     public event Action OnPlayerBallCollision;
 
+
+
     public void Init()
     {
         if (!TryGetComponent<IBallMover>(out _ballMover)) Debug.LogWarning("Ball mover is not loaded!");
     }
+
     public void CollisionAction(Collision2D collision)
     {
 
@@ -30,7 +32,8 @@ public class BasicBallCollisionResponse : MonoBehaviour, IBallCollisionResponse
             Vector2 _contactNormal = collision.contacts[0].normal;
             ReflectDirection(_contactNormal);
 
-            OnPlayerBallCollision.Invoke();
+            if (OnPlayerBallCollision != null)
+                OnPlayerBallCollision.Invoke();
         }
 
         if (collision.transform.CompareTag("HorizontalWall"))
@@ -52,7 +55,18 @@ public class BasicBallCollisionResponse : MonoBehaviour, IBallCollisionResponse
 
     private void DeathAction()
     {
-        _globalBallChanger.ChangeBall(UnityEngine.Random.Range(0, DataController.currentSessionData.UsableBalls.Count));
+        if (DataController.currentSessionData.UsableBalls.Count > 3)
+        {
+            var ballsPool = new List<BallStats>(DataController.currentSessionData.UsableBalls);
+            int idToAvoid = ballsPool.IndexOf(DataController.currentSessionData.CurrentBallActivated);
+            int randomId = UnityEngine.Random.Range(0, ballsPool.Count);
+            while (randomId == idToAvoid)
+            {
+                randomId = UnityEngine.Random.Range(0, ballsPool.Count);
+            }
+            _globalBallChanger.ChangeBall(randomId);
+        }
+        else BallCreator.CreateBallData("NewBall", 6f, 2f, UnityEngine.Random.ColorHSV(0, 1, 0, 1, 0, 1, 1, 1));
     }
 
     private void ReflectDirection(Vector2 normal)

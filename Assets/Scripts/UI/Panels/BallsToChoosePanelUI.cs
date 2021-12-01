@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +7,6 @@ using System;
 public class BallsToChoosePanelUI : MonoBehaviour
 {
     public event Action OnBallIsChoosed;
-
 
     [SerializeField] Button _ballButtonPrefab;
     [SerializeField] GlobalBallChanger _globalBallChanger;
@@ -26,19 +24,12 @@ public class BallsToChoosePanelUI : MonoBehaviour
         }
     }
 
-    void Subscribe()
-    {
-        BallCreator.OnBallCreation += AddNewBall;
-    }
-
-    void Unsubscribe()
-    {
-        BallCreator.OnBallCreation -= AddNewBall;
-    }
+    void Subscribe() => BallCreator.OnBallCreation += AddNewBall;
+    void Unsubscribe() => BallCreator.OnBallCreation -= AddNewBall;
 
     public void AddNewBall(BallStats ballS)
     {
-        var buttonPrefab = Instantiate(_ballButtonPrefab.gameObject, transform);
+        var buttonPrefab = Instantiate(_ballButtonPrefab.gameObject, transform.GetChild(0).GetChild(0));
         var newButton = buttonPrefab.GetComponent<Button>();
         _buttonBallOptions.Add(newButton);
         newButton.onClick.AddListener(delegate { ChooseBallButtonPressed(_buttonBallOptions.Count - 1); });
@@ -52,7 +43,8 @@ public class BallsToChoosePanelUI : MonoBehaviour
     public void ChooseBallButtonPressed(int buttonId)
     {
         _globalBallChanger.ChangeBall(buttonId);
-        OnBallIsChoosed.Invoke();
+        if (OnBallIsChoosed != null)
+            OnBallIsChoosed.Invoke();
     }
 
     private void OnDisable()

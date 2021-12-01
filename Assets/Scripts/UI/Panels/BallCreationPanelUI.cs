@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 public class BallCreationPanelUI : MonoBehaviour
 {
-
     [Header("Images")]
     [SerializeField] Image _ballImage;
 

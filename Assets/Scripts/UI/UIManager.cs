@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
@@ -7,7 +5,6 @@ using System;
 public class UIManager : MonoBehaviour
 {
     public event Action PlayButtonPressed;
-
 
     [Header("Panels")]
     [SerializeField] GameObject _menuPanel;
@@ -19,12 +16,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button _ballSettingsButton;
 
 
-
-
-    public void Init()
-    {
-        Subscribe();
-    }
+    public void Init() => Subscribe();
 
     private void Subscribe()
     {
@@ -34,22 +26,16 @@ public class UIManager : MonoBehaviour
 
     public void PlayButtonPress()
     {
-        PlayButtonPressed.Invoke();
+        if (PlayButtonPressed != null)
+            PlayButtonPressed.Invoke();
     }
 
-    public void BallSettingsButton()
-    {
-        SettingsBallPanelTurn(true);
+    public void BallSettingsButton() => SettingsBallPanelTurn(true);
 
-        
-    }
-
+    public void ScoreUITurn(bool onOFF) => _scoreUi.gameObject.SetActive(onOFF);
     public void ScoreChanged(int value) => _scoreUi.SetScoreText(value);
-
     public void SetScoreRecord(int value) => _scoreUi.SetScoreRecordText(value);
-
     public void MenuPanelTurn(bool onOff) => _menuPanel.SetActive(onOff);
-
     public void SettingsBallPanelTurn(bool onOff) => _ballSettingsPanel.SetActive(onOff);
 
     private void OnDestroy()

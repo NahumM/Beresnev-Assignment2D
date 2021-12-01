@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
@@ -7,7 +5,6 @@ public class Ball : MonoBehaviour
 {
 
     BallStats _ballStats;
-
 
     // Components
     IBallMover _ballMover;
@@ -38,7 +35,6 @@ public class Ball : MonoBehaviour
         if (_ballCollisionResponse != null)
         {
             _ballCollisionResponse.OnPlayerBallCollision += BallReflectedByPlayer;
-           // _ballCollisionResponse.OnBallDeathCollision += ChangeBall;
         }
 
         BallCreator.OnBallCreation += ChangeBall;
@@ -49,7 +45,6 @@ public class Ball : MonoBehaviour
         if (_ballCollisionResponse != null)
         {
             _ballCollisionResponse.OnPlayerBallCollision -= BallReflectedByPlayer;
-            //_ballCollisionResponse.OnBallDeathCollision -= ChangeBall;
         }
 
         BallCreator.OnBallCreation -= ChangeBall;
@@ -78,14 +73,10 @@ public class Ball : MonoBehaviour
 
     private void BallReflectedByPlayer()
     {
-        OnPlayerReflectionResponse.Invoke();
+        if (OnPlayerReflectionResponse != null)
+            OnPlayerReflectionResponse.Invoke();
     }
 
-    private void OnDestroy()
-    {
-        Unsubscribe();
-    }
-
-
+    private void OnDestroy() => Unsubscribe();
     private void OnCollisionEnter2D(Collision2D collision) => _ballCollisionResponse?.CollisionAction(collision);
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +5,6 @@ public class DataController : MonoBehaviour
 {
 
     public static SaveData currentSessionData;
-
 
     public void Init()
     {
@@ -33,16 +31,8 @@ public class DataController : MonoBehaviour
         }
     }
 
-    private void Subscribe()
-    {
-        BallCreator.OnBallCreation += OnNewBallCreation;
-    }
-
-    private void Unsubscribe()
-    {
-        BallCreator.OnBallCreation -= OnNewBallCreation;
-    }
-
+    private void Subscribe() => BallCreator.OnBallCreation += OnNewBallCreation;
+    private void Unsubscribe() => BallCreator.OnBallCreation -= OnNewBallCreation;
 
     void OnNewBallCreation(BallStats stats)
     {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -22,11 +20,7 @@ public class BallMover : MonoBehaviour, IBallMover
         AssignStartRandomDirection();
     }
 
-    private void AssignStartRandomDirection()
-    {
-        _direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-    }
-
+    private void AssignStartRandomDirection() => _direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
     public void StartMovement() => _isStartMoving = true;
     public void SetMovingSpeed(float speed) => _ballSpeed = speed;
     public void AssignNewDirection(Vector3 direction) => _direction = direction;
